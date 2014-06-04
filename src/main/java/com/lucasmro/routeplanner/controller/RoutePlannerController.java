@@ -14,6 +14,8 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
 import com.lucasmro.routeplanner.model.Map;
+import com.lucasmro.routeplanner.model.RouteDirections;
+import com.lucasmro.routeplanner.service.RoutePlannerService;
 
 @Path("/route")
 public class RoutePlannerController {
@@ -23,13 +25,19 @@ public class RoutePlannerController {
 	public Response getShortestRoute(@QueryParam("origin") String origin, @QueryParam("destination") String destination, @QueryParam("fuelEfficiency") Double fuelEfficiency, @QueryParam("fuelPrice") Double fuelPrice) {
 		validateShortestRouteParameters(origin, destination, fuelEfficiency, fuelPrice);
 		
-		return Response.status(200).build();
+		RoutePlannerService service = new RoutePlannerService();
+		RouteDirections routeDirections = service.getDirections(origin, destination, fuelEfficiency, fuelPrice);
+
+		return Response.status(200).entity(routeDirections).build();
 	}
 	
 	@POST
 	@Path("/map")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response saveMap(Map map) {
+		RoutePlannerService service = new RoutePlannerService();
+		service.persist(map);
+
 		return Response.status(Response.Status.CREATED).build();
 	}
 	
