@@ -1,14 +1,16 @@
 Route Planner
 =======
 
-API para encontrar o caminho mais rápido entre dois pontos utilizando o Neo4j.
+**To read this document in Brazilian Portuguese, access the [README.pt-br.md](README.pt-br.md) file.**
 
-## Desafio
+API to find the fastest route using Neo4j.
 
-Desenvolver um sistema de entregas visando sempre o menor custo.
-Para popular sua base de dados o sistema precisa expor um Webservices que aceite o formato de malha logística (exemplo abaixo) e nesta mesma requisição o requisitante deverá informar um nome para este mapa.
-É importante que os mapas sejam persistidos para evitar que a cada novo deploy todas as informações desapareçam.
-O formato de malha logística é bastante simples, cada linha mostra uma rota: ponto de origem, ponto de destino e distância entre os pontos em quilômetros.
+## Challenge
+
+Develop a delivery system always prioritizing the lowest cost path.
+To populate your database, the system needs to expose Web services that accept the logistics network format (example below) and in this same request the name for this map must be provided.
+The persistence of these maps is very important in order to prevent the information from disappearing after deployment.
+The logistics network format is quite simple, each line shows a route: origin, destination and distance (in kilometers) between these points.
 
 A B 10
 
@@ -22,45 +24,46 @@ B E 50
 
 D E 30
 
-Um exemplo de entrada seria, origem A, destino D, autonomia 10, valor do litro 2,50; a resposta seria a rota A B D com custo de 6,75.
+A sample entry would be, origin A, destination D, autonomy 10, liter value 2.50; the correct answer would be the route A B D with a cost of 6.75.
 
-## Motivação
+## Motivation
 
-Devido a necessidade de encontrar o menor caminho entre dois pontos, ficou evidente que as relações entre as entidades são mais importante do que o dado em si.
-No tradicional modelo de banco de dados relacional, uma consulta para analisar esses relacionamentos seria bastante complexa.
+Due to the need to find the shortest path between two points, it became clear that the relationship between the entities is more important than the data itself.
+In a traditional relational database model, a query to analyze these relationships would be quite complex.
 
-Diante disso, uma possível solução seria trocar o banco de dados para um modelo baseado em grafo.
-O banco de dados escolhido para a implementação da solução foi o Neo4j, por ser open source, contar com uma boa documentação, ter uma comunidade ativa e ser a maior referência nesse modelo de banco de dados em grafo.
+Therefore, a possible solution would be to choose a graph-based database.
+The database chosen for the implementation of the solution was the Neo4j, because it is open source, relies on good documentation, has an active community and because it is the largest reference in this field.
 
-Além disso, o Neo4j já implementa internamente o algoritmo Dijkstra, que é um algoritmo otimizado para a busca do menor caminho.
+Furthermore, Neo4j already implements the Dijkstra algorithm, which is an optimal algorithm to search for the shortest path.
 
-## Requisitos
+
+## Requirements
 
 - Java 7
 - Tomcat 7
 - Neo4j Server 2.0.3 Community Edition
 
-## Configuração
+## Configuration
 
 ### Neo4j
 
-1 - Faça o [download](http://www.neo4j.org/download) do Neo4j Server 2.0.3 Community Edition
+1 - [Download](http://www.neo4j.org/download) the Neo4j Server 2.0.3 Community Edition.
 
-2 - Extraia o conteúdo do arquivo e inicie o servidor
+2 - Extract the archive contents and start the server.
 
 ```html
 $bin/neo4j start
 ```
 
-3 - Acesse o painel do servidor no endereço [http://localhost:7474/](http://localhost:7474/)
+3 - Access the server panel at the address [http://localhost:7474/](http://localhost:7474/).
 
-## Como utilizar
+## How to use
 
-Com o servidor Web e o Neo4j rodando, execute as requisições a seguir para criar o mapa logístico e para encontrar o menor caminho.
+With the Web server and the Neo4j running, perform the following requests to create the logistic map and to find the shortest path.
 
-### Criar um mapa logístico
+### Create a logistic map
 
-**Exemplo de requisição:**
+**Example request:**
 
 - **POST** [http://localhost:8080/route-planner/route/map](http://localhost:8080/route-planner/route/map)
 - **Accept:** application/json
@@ -104,19 +107,19 @@ Com o servidor Web e o Neo4j rodando, execute as requisições a seguir para cri
 	}
 ```
 
-**Exemplo de resposta:**
+**Example response:**
 
 - **201** CREATED
 
-### Encontrar o menor caminho
+### Find the shortest path
 
-**Exemplo de requisição:**
+**Example request:**
 
 - **GET** [http://localhost:8080/route-planner/route/shortest?origin=A&destination=D&fuelEfficiency=10&fuelPrice=2.5](http://localhost:8080/route-planner/route/shortest?origin=A&destination=D&fuelEfficiency=10&fuelPrice=2.5)
 - **Accept:** application/json
 - **Content-Type:** application/json
 
-**Exemplo de resposta:**
+**Example response:**
 
 - **200** OK
 
@@ -132,9 +135,9 @@ Com o servidor Web e o Neo4j rodando, execute as requisições a seguir para cri
 	}
 ```
 
-## Códigos de erro
+## Error Codes
 
-| Código | Descrição   | Motivo                                       |
-| ------ | ----------- | -------------------------------------------- |
-| 400    | Bad Request | Parâmetros ausentes ou parâmetros inválidos. |
-| 404    | Not Found   | Valor não encontrado no banco de dados.      |
+| Code | Description | Reason                                    |
+| ---- | ----------- | ----------------------------------------- |
+| 400  | Bad Request | Missing parameters or invalid parameters. |
+| 404  | Not Found   | Value not found in the database.	         |
